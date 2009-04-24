@@ -18,37 +18,37 @@
 #     PL_FILES => {  }
 #     PREREQ_PM => { Test::More=>q[0], ExtUtils::MakeMaker=>q[6.48] }
 #     VERSION => q[0.00001]
-#     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
+#     dist => {  }
 
 # --- MakeMaker post_initialize section:
 
 
 # --- MakeMaker const_config section:
 
-# These definitions are from config.sh (via /usr/local/lib/perl5/5.10.0/i686-linux/Config.pm).
+# These definitions are from config.sh (via /usr/lib/perl5/5.8.8/i386-linux-thread-multi/Config.pm).
 # They may have been overridden via Makefile.PL or on the command line.
 AR = ar
-CC = cc
+CC = gcc
 CCCDLFLAGS = -fPIC
-CCDLFLAGS = -Wl,-E
+CCDLFLAGS = -Wl,-E -Wl,-rpath,/usr/lib/perl5/5.8.8/i386-linux-thread-multi/CORE
 DLEXT = so
 DLSRC = dl_dlopen.xs
 EXE_EXT = 
 FULL_AR = /usr/bin/ar
-LD = cc
-LDDLFLAGS = -shared -O2 -L/usr/local/lib
+LD = gcc
+LDDLFLAGS = -shared -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m32 -march=i386 -mtune=generic -fasynchronous-unwind-tables -L/usr/local/lib
 LDFLAGS =  -L/usr/local/lib
 LIBC = /lib/libc-2.5.so
 LIB_EXT = .a
 OBJ_EXT = .o
 OSNAME = linux
-OSVERS = 2.6.18-53.el5pae
+OSVERS = 2.6.18-53.1.14.el5pae
 RANLIB = :
-SITELIBEXP = /usr/local/lib/perl5/site_perl/5.10.0
-SITEARCHEXP = /usr/local/lib/perl5/site_perl/5.10.0/i686-linux
+SITELIBEXP = /usr/lib/perl5/site_perl/5.8.8
+SITEARCHEXP = /usr/lib/perl5/site_perl/5.8.8/i386-linux-thread-multi
 SO = so
-VENDORARCHEXP = 
-VENDORLIBEXP = 
+VENDORARCHEXP = /usr/lib/perl5/vendor_perl/5.8.8/i386-linux-thread-multi
+VENDORLIBEXP = /usr/lib/perl5/vendor_perl/5.8.8
 
 
 # --- MakeMaker constants section:
@@ -71,59 +71,59 @@ INST_LIB = blib/lib
 INST_MAN1DIR = blib/man1
 INST_MAN3DIR = blib/man3
 MAN1EXT = 1
-MAN3EXT = 3
+MAN3EXT = 3pm
 INSTALLDIRS = site
 DESTDIR = 
 PREFIX = $(SITEPREFIX)
-PERLPREFIX = /usr/local
-SITEPREFIX = /usr/local
-VENDORPREFIX = 
-INSTALLPRIVLIB = /usr/local/lib/perl5/5.10.0
+PERLPREFIX = /usr
+SITEPREFIX = /usr
+VENDORPREFIX = /usr
+INSTALLPRIVLIB = /usr/lib/perl5/5.8.8
 DESTINSTALLPRIVLIB = $(DESTDIR)$(INSTALLPRIVLIB)
-INSTALLSITELIB = /usr/local/lib/perl5/site_perl/5.10.0
+INSTALLSITELIB = /usr/lib/perl5/site_perl/5.8.8
 DESTINSTALLSITELIB = $(DESTDIR)$(INSTALLSITELIB)
-INSTALLVENDORLIB = 
+INSTALLVENDORLIB = /usr/lib/perl5/vendor_perl/5.8.8
 DESTINSTALLVENDORLIB = $(DESTDIR)$(INSTALLVENDORLIB)
-INSTALLARCHLIB = /usr/local/lib/perl5/5.10.0/i686-linux
+INSTALLARCHLIB = /usr/lib/perl5/5.8.8/i386-linux-thread-multi
 DESTINSTALLARCHLIB = $(DESTDIR)$(INSTALLARCHLIB)
-INSTALLSITEARCH = /usr/local/lib/perl5/site_perl/5.10.0/i686-linux
+INSTALLSITEARCH = /usr/lib/perl5/site_perl/5.8.8/i386-linux-thread-multi
 DESTINSTALLSITEARCH = $(DESTDIR)$(INSTALLSITEARCH)
-INSTALLVENDORARCH = 
+INSTALLVENDORARCH = /usr/lib/perl5/vendor_perl/5.8.8/i386-linux-thread-multi
 DESTINSTALLVENDORARCH = $(DESTDIR)$(INSTALLVENDORARCH)
-INSTALLBIN = /usr/local/bin
+INSTALLBIN = /usr/bin
 DESTINSTALLBIN = $(DESTDIR)$(INSTALLBIN)
-INSTALLSITEBIN = /usr/local/bin
+INSTALLSITEBIN = /usr/bin
 DESTINSTALLSITEBIN = $(DESTDIR)$(INSTALLSITEBIN)
-INSTALLVENDORBIN = 
+INSTALLVENDORBIN = /usr/bin
 DESTINSTALLVENDORBIN = $(DESTDIR)$(INSTALLVENDORBIN)
-INSTALLSCRIPT = /usr/local/bin
+INSTALLSCRIPT = /usr/bin
 DESTINSTALLSCRIPT = $(DESTDIR)$(INSTALLSCRIPT)
-INSTALLSITESCRIPT = /usr/local/bin
+INSTALLSITESCRIPT = /usr/bin
 DESTINSTALLSITESCRIPT = $(DESTDIR)$(INSTALLSITESCRIPT)
-INSTALLVENDORSCRIPT = 
+INSTALLVENDORSCRIPT = /usr/bin
 DESTINSTALLVENDORSCRIPT = $(DESTDIR)$(INSTALLVENDORSCRIPT)
-INSTALLMAN1DIR = /usr/local/share/man/man1
+INSTALLMAN1DIR = /usr/share/man/man1
 DESTINSTALLMAN1DIR = $(DESTDIR)$(INSTALLMAN1DIR)
-INSTALLSITEMAN1DIR = /usr/local/share/man/man1
+INSTALLSITEMAN1DIR = /usr/share/man/man1
 DESTINSTALLSITEMAN1DIR = $(DESTDIR)$(INSTALLSITEMAN1DIR)
-INSTALLVENDORMAN1DIR = 
+INSTALLVENDORMAN1DIR = /usr/share/man/man1
 DESTINSTALLVENDORMAN1DIR = $(DESTDIR)$(INSTALLVENDORMAN1DIR)
-INSTALLMAN3DIR = /usr/local/share/man/man3
+INSTALLMAN3DIR = /usr/share/man/man3
 DESTINSTALLMAN3DIR = $(DESTDIR)$(INSTALLMAN3DIR)
-INSTALLSITEMAN3DIR = /usr/local/share/man/man3
+INSTALLSITEMAN3DIR = /usr/share/man/man3
 DESTINSTALLSITEMAN3DIR = $(DESTDIR)$(INSTALLSITEMAN3DIR)
-INSTALLVENDORMAN3DIR = 
+INSTALLVENDORMAN3DIR = /usr/share/man/man3
 DESTINSTALLVENDORMAN3DIR = $(DESTDIR)$(INSTALLVENDORMAN3DIR)
 PERL_LIB =
-PERL_ARCHLIB = /usr/local/lib/perl5/5.10.0/i686-linux
+PERL_ARCHLIB = /usr/lib/perl5/5.8.8/i386-linux-thread-multi
 LIBPERL_A = libperl.a
 FIRST_MAKEFILE = Makefile
 MAKEFILE_OLD = Makefile.old
 MAKE_APERL_FILE = Makefile.aperl
 PERLMAINCC = $(CC)
-PERL_INC = /usr/local/lib/perl5/5.10.0/i686-linux/CORE
-PERL = /usr/local/bin/perl "-Iinc"
-FULLPERL = /usr/local/bin/perl "-Iinc"
+PERL_INC = /usr/lib/perl5/5.8.8/i386-linux-thread-multi/CORE
+PERL = /usr/bin/perl "-Iinc"
+FULLPERL = /usr/bin/perl "-Iinc"
 ABSPERL = $(PERL)
 PERLRUN = $(PERL)
 FULLPERLRUN = $(FULLPERL)
@@ -135,7 +135,7 @@ PERL_CORE = 0
 PERM_RW = 644
 PERM_RWX = 755
 
-MAKEMAKER   = /usr/local/lib/perl5/5.10.0/ExtUtils/MakeMaker.pm
+MAKEMAKER   = /usr/lib/perl5/5.8.8/ExtUtils/MakeMaker.pm
 MM_VERSION  = 6.48
 MM_REVISION = 64800
 
@@ -221,10 +221,10 @@ PM_TO_BLIB = lib/Hoppy/TCPHandler/Disconnected.pm \
 	blib/lib/Hoppy/TCPHandler/Connected.pm \
 	lib/Hoppy/Service/Logout.pm \
 	blib/lib/Hoppy/Service/Logout.pm \
-	lib/Hoppy/TCPHandler/Error.pm \
-	blib/lib/Hoppy/TCPHandler/Error.pm \
 	lib/Hoppy/TCPHandler.pm \
-	blib/lib/Hoppy/TCPHandler.pm
+	blib/lib/Hoppy/TCPHandler.pm \
+	lib/Hoppy/TCPHandler/Error.pm \
+	blib/lib/Hoppy/TCPHandler/Error.pm
 
 
 # --- MakeMaker platform_constants section:
@@ -283,7 +283,7 @@ ZIPFLAGS = -r
 COMPRESS = gzip --best
 SUFFIX = .gz
 SHAR = shar
-PREOP = $(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"
+PREOP = $(NOECHO) $(NOOP)
 POSTOP = $(NOECHO) $(NOOP)
 TO_UNIX = $(NOECHO) $(NOOP)
 CI = ci -u
@@ -755,7 +755,7 @@ $(FIRST_MAKEFILE) : Makefile.PL $(CONFIGDEP)
 
 # --- MakeMaker makeaperl section ---
 MAP_TARGET    = perl
-FULLPERL      = /usr/local/bin/perl
+FULLPERL      = /usr/bin/perl
 
 $(MAP_TARGET) :: static $(MAKE_APERL_FILE)
 	$(MAKE) $(USEMAKEFILE) $(MAKE_APERL_FILE) $@
@@ -808,7 +808,7 @@ ppd :
 	$(NOECHO) $(ECHO) '        <DEPENDENCY NAME="ExtUtils-MakeMaker" VERSION="6,48,0,0" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <DEPENDENCY NAME="Test-More" VERSION="0,0,0,0" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <OS NAME="$(OSNAME)" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <ARCHITECTURE NAME="i686-linux-5.1" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <ARCHITECTURE NAME="i386-linux-thread-multi-5.8" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <CODEBASE HREF="" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    </IMPLEMENTATION>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '</SOFTPKG>' >> $(DISTNAME).ppd
@@ -830,8 +830,8 @@ pm_to_blib : $(TO_INST_PM)
 	  lib/Hoppy/Service/Login.pm blib/lib/Hoppy/Service/Login.pm \
 	  lib/Hoppy/TCPHandler/Connected.pm blib/lib/Hoppy/TCPHandler/Connected.pm \
 	  lib/Hoppy/Service/Logout.pm blib/lib/Hoppy/Service/Logout.pm \
-	  lib/Hoppy/TCPHandler/Error.pm blib/lib/Hoppy/TCPHandler/Error.pm \
-	  lib/Hoppy/TCPHandler.pm blib/lib/Hoppy/TCPHandler.pm 
+	  lib/Hoppy/TCPHandler.pm blib/lib/Hoppy/TCPHandler.pm \
+	  lib/Hoppy/TCPHandler/Error.pm blib/lib/Hoppy/TCPHandler/Error.pm 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
 
@@ -843,21 +843,3 @@ pm_to_blib : $(TO_INST_PM)
 
 # End.
 # Postamble by Module::Install 0.77
-# --- Module::Install::Admin::Makefile section:
-
-realclean purge ::
-	$(RM_F) $(DISTVNAME).tar$(SUFFIX)
-	$(RM_RF) inc MANIFEST.bak _build
-	$(PERL) -I. "-MModule::Install::Admin" -e "remove_meta()"
-
-reset :: purge
-
-upload :: test dist
-	cpan-upload -verbose $(DISTVNAME).tar$(SUFFIX)
-
-grok ::
-	perldoc Module::Install
-
-distsign ::
-	cpansign -s
-

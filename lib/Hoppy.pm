@@ -67,7 +67,7 @@ sub unicast {
     $poe_kernel->post( $session_id => "Send" => $message );
 }
 
-sub muticast {
+sub multicast {
     my $self    = shift;
     my $args    = shift;
     my $sender  = $args->{sender};
@@ -94,7 +94,7 @@ sub broadcast {
     }
 }
 
-sub regst_service {
+sub regist_service {
     my $self = shift;
     while (@_) {
         my $label = shift @_;
@@ -160,8 +160,12 @@ sub _load_classes {
             { login  => __PACKAGE__ . '::Service::Login' },
             { logout => __PACKAGE__ . '::Service::Logout' },
         );
-        if ( $self->config->{regist_service} ) {
-            @services = ( @services, @{ $self->config->{regist_services} } );
+        if ( $self->config->{regist_services} ) {
+            while ( my ( $key, $value ) =
+                each %{ $self->config->{regist_services} } )
+            {
+                push @services, { $key => $value };
+            }
         }
         for (@services) {
             my ( $label, $class ) = %$_;
