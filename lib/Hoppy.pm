@@ -195,15 +195,50 @@ __END__
 
 =head1 NAME
 
-Hoppy -
+Hoppy - Flash XMLSocket Server.
 
 =head1 SYNOPSIS
 
   use Hoppy;
 
+  use MyService::Auth;
+  use MyService::Chat;
+
+  my $config = {
+    alias => 'hoppy',
+    port  => 12345,
+  };
+
+  my $server = Hoppy->new(config => $config);
+
+  $server->regist_service(
+     auth => 'MyService::Auth',
+     chat => 'MyService::Chat',
+  );
+
+  $server->start;
+
 =head1 DESCRIPTION
 
-Hoppy is
+Hoppy is a perl implementation of Flash XMLSocket Server.
+
+=head1 METHODS
+
+=head2 new(config => $config)
+
+=head2 regist_service( $service_label => $service_class )
+
+=head2 start
+
+=head2 stop
+
+=head2 unicast( $user_id, $message )
+
+=head2 multicast( $sender_session_id, $room_id, $message )
+
+=head2 broadcast( $sender_session_id, $message )
+
+=head2 dispatch($method, $params, $poe)
 
 =head1 AUTHOR
 

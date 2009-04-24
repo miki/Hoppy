@@ -132,21 +132,62 @@
 .\" ========================================================================
 .\"
 .IX Title "Hoppy 3"
-.TH Hoppy 3 "2009-04-24" "perl v5.10.0" "User Contributed Perl Documentation"
+.TH Hoppy 3 "2009-04-25" "perl v5.10.0" "User Contributed Perl Documentation"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
 .nh
 .SH "NAME"
-Hoppy \-
+Hoppy \- Flash XMLSocket Server.
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
 .Vb 1
 \&  use Hoppy;
+\&
+\&  use MyService::Auth;
+\&  use MyService::Chat;
+\&
+\&  my $config = {
+\&    alias => \*(Aqhoppy\*(Aq,
+\&    port  => 12345,
+\&  };
+\&
+\&  my $server = Hoppy\->new(config => $config);
+\&
+\&  $server\->regist_service(
+\&     auth => \*(AqMyService::Auth\*(Aq,
+\&     chat => \*(AqMyService::Chat\*(Aq,
+\&  );
+\&
+\&  $server\->start;
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
-Hoppy is
+Hoppy is a perl implementation of Flash XMLSocket Server.
+.SH "METHODS"
+.IX Header "METHODS"
+.ie n .Sh "new(config => $config)"
+.el .Sh "new(config => \f(CW$config\fP)"
+.IX Subsection "new(config => $config)"
+.ie n .Sh "regist_service( $service_label\fP => \f(CW$service_class )"
+.el .Sh "regist_service( \f(CW$service_label\fP => \f(CW$service_class\fP )"
+.IX Subsection "regist_service( $service_label => $service_class )"
+.Sh "start"
+.IX Subsection "start"
+.Sh "stop"
+.IX Subsection "stop"
+.ie n .Sh "unicast( $user_id\fP, \f(CW$message )"
+.el .Sh "unicast( \f(CW$user_id\fP, \f(CW$message\fP )"
+.IX Subsection "unicast( $user_id, $message )"
+.ie n .Sh "multicast( $sender_session_id\fP, \f(CW$room_id\fP, \f(CW$message )"
+.el .Sh "multicast( \f(CW$sender_session_id\fP, \f(CW$room_id\fP, \f(CW$message\fP )"
+.IX Subsection "multicast( $sender_session_id, $room_id, $message )"
+.ie n .Sh "broadcast( $sender_session_id\fP, \f(CW$message )"
+.el .Sh "broadcast( \f(CW$sender_session_id\fP, \f(CW$message\fP )"
+.IX Subsection "broadcast( $sender_session_id, $message )"
+.ie n .Sh "dispatch($method, $params\fP, \f(CW$poe)"
+.el .Sh "dispatch($method, \f(CW$params\fP, \f(CW$poe\fP)"
+.IX Subsection "dispatch($method, $params, $poe)"
 .SH "AUTHOR"
 .IX Header "AUTHOR"
 Takeshi Miki <miki@cpan.org>

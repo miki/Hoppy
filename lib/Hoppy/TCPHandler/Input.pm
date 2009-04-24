@@ -39,3 +39,34 @@ sub cross_domain_policy_xml {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Hoppy::TCPHandler::Input - TCP handler class that will be used when client input any data. 
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+TCP handler class that will be used when client input any data. 
+And then, it dispatches input data to registered classes. 
+
+=head1 METHODS
+
+=head2 do_handle($poe)
+
+=head2 cross_domain_policy_xml
+
+=head1 AUTHOR
+
+Takeshi Miki E<lt>miki@cpan.orgE<gt>
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=head1 SEE ALSO
+
+=cut
