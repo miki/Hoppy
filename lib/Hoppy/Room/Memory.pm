@@ -69,8 +69,9 @@ sub logout {
     my $user    = $self->fetch_user_from_user_id($user_id);
 
     delete $self->{sessions}->{ $user->session_id };
-    delete $self->{where_in}->{$user_id};
-    delete $self->{rooms}->{$user_id};
+    my $room_id = delete $self->{where_in}->{$user_id};
+    delete $self->{rooms}->{$room_id}->{$user_id};
+    $self->context->{not_authorized}->{ $user->session_id } = 1;
     return 1;
 }
 
@@ -86,7 +87,7 @@ sub fetch_user_from_session_id {
     my $self       = shift;
     my $session_id = shift;
     return unless ($session_id);
-    my $user_id    = $self->{sessions}->{$session_id};
+    my $user_id = $self->{sessions}->{$session_id};
     return $self->fetch_user_from_user_id($user_id);
 }
 
