@@ -115,6 +115,7 @@ sub _setup {
 
     $self->_load_classes;
 
+    my $filter = POE::Filter::Line->new( Literal => "\x00" ) unless $self->config->{test};
     POE::Component::Server::TCP->new(
         Alias => $self->config->{alias} || 'xmlsocketd',
         Port  => $self->config->{port}  || 10000,
@@ -123,7 +124,7 @@ sub _setup {
         ClientDisconnected => sub { $self->_tcp_handle( Disconnected => @_ ) },
         ClientError        => sub { $self->_tcp_handle( Error        => @_ ) },
 
-        #        ClientFilter => POE::Filter::Line->new( Literal => "\x00" ),
+        ClientFilter => $filter,
         InlineStates => {
             Send => sub {
                 $self->_tcp_handle( Send => @_ );

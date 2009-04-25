@@ -24,7 +24,7 @@ if ( my $pid = fork ) {
     wait;
 }
 elsif ( defined $pid ) {
-    my $server = Hoppy->new( config => { alias => "server" } );
+    my $server = Hoppy->new( config => { alias => "server", test => 1 } );
     POE::Session->create(
         inline_states => {
             _start => sub {
