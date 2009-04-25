@@ -99,3 +99,102 @@ sub fetch_users_from_room_id {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Hoppy::Room::Memory - Room on memory. It manages users and their sessions.
+
+=head1 SYNOPSIS
+
+  use Hoppy;
+
+  my $server = Hoppy->new;
+  my $room = $server->room; # get room object from the Hoppy.
+
+  # longin and logout are handled automatically.
+  $room->login(...);
+  $room->logout(...);
+
+  # create or delete a new room.
+  $room->create_room('hoge');
+  $room->delete_room('hoge');
+
+  # you can fetch user(s) object from any ID.
+  my $user  = $room->fetch_user_from_user_id($user_id);
+  my $user  = $room->fetch_user_from_session_id($session_id);
+  my $users = $room->fetch_users_from_room_id($room_id);
+
+=head1 DESCRIPTION
+
+Room on memory. It manages users and their sessions.
+
+=head1 METHODS
+
+=head2 new
+
+=head2 regist_service( $service_label => $service_class )
+
+=head2 start
+
+=head2 stop
+
+=head2 unicast( $user_id, $message )
+
+=head2 multicast( $sender_session_id, $room_id, $message )
+
+=head2 broadcast( $sender_session_id, $message )
+
+=head2 dispatch($method, $params, $poe)
+
+=head1 AUTHOR
+
+Takeshi Miki E<lt>miki@cpan.orgE<gt>
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=head1 SEE ALSO
+
+=cut
+=head1 METHODS
+
+=head2 new
+
+=head2 create_room($room_id); 
+
+=head2 delete_room($room_id);
+
+=head2 login(\%args,$poe_object);
+
+  %args = (
+    user_id    => $user_id,
+    session_id => $session_id,
+    password   => $password,  #optional
+    room_id    => $room_id,   #optional
+  );
+
+=head2 logout(\%args, $poe_object);
+
+  %args = ( user_id => $user_id );
+
+=head2 fetch_user_from_user_id($user_id) 
+
+=head2 fetch_user_from_session_id($session_id) 
+
+=head2 fetch_users_from_room_id($room_id) 
+
+=head1 AUTHOR
+
+Takeshi Miki E<lt>miki@cpan.orgE<gt>
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=head1 SEE ALSO
+
+=cut
