@@ -1,4 +1,7 @@
 Revision history for Perl extension Hoppy
 
+0.00002   2009/05/08
+        - fix a typo in Makefile.PL
+
 0.00001   2009/04/25
         - original version
