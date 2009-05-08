@@ -3,7 +3,7 @@ name 'Hoppy';
 all_from 'lib/Hoppy.pm';
 
 requires 'POE';
-requires 'POE::XS::Loop::Epoll';
+requires 'POE::XS::Loop::EPoll';
 requires 'POE::Sugar::Args';
 requires 'POE::Filter::Line';
 requires 'POE::Component::Server::TCP';
