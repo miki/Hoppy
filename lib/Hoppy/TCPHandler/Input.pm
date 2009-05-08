@@ -12,6 +12,16 @@ sub do_handle {
         my $xml = $self->cross_domain_policy_xml;
         $c->handler->{Send}->do_handle( $poe, $xml );
     }
+    elsif ( $input eq 'exit' ) {
+        my $session_id = $poe->session->ID;
+        my $user       = $c->room->fetch_user_from_session_id($session_id);
+        if ($user) {
+            $c->room->logout( { user_id => $user->user_id }, $poe );
+        }
+        delete $c->{sessions}->{$session_id};
+        delete $c->{not_authorized}->{$session_id};
+        $poe->kernel->yield("shutdown");
+    }
     else {
         my $data = '';
         eval { $data = $c->formatter->deserialize($input); };
