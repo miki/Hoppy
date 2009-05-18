@@ -1,5 +1,10 @@
 Revision history for Perl extension Hoppy
 
+0.00003   2009/05/18
+        - fix a bug ( regist_service() method does wrong behavior )
+        - fix a POD
+        - add client command 'exit'
+
 0.00002   2009/05/08
         - fix a typo in Makefile.PL
 

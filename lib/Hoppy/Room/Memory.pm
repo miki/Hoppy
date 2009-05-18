@@ -133,36 +133,6 @@ Room on memory. It manages users and their sessions.
 
 =head2 new
 
-=head2 regist_service( $service_label => $service_class )
-
-=head2 start
-
-=head2 stop
-
-=head2 unicast( $user_id, $message )
-
-=head2 multicast( $sender_session_id, $room_id, $message )
-
-=head2 broadcast( $sender_session_id, $message )
-
-=head2 dispatch($method, $params, $poe)
-
-=head1 AUTHOR
-
-Takeshi Miki E<lt>miki@cpan.orgE<gt>
-
-=head1 LICENSE
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=head1 SEE ALSO
-
-=cut
-=head1 METHODS
-
-=head2 new
-
 =head2 create_room($room_id); 
 
 =head2 delete_room($room_id);

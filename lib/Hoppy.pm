@@ -13,7 +13,7 @@ use base qw(Hoppy::Base);
 
 __PACKAGE__->mk_accessors($_) for qw(handler formatter service room);
 
-our $VERSION = '0.00002';
+our $VERSION = '0.00003';
 
 sub new {
     my $class = shift;
@@ -102,10 +102,10 @@ sub regist_service {
         unless ( ref($class) ) {
             $class->require or die $@;
             my $obj = $class->new( context => $self );
-            $self->handler->{$label} = $obj;
+            $self->service->{$label} = $obj;
         }
         else {
-            $self->handler->{$label} = $class;
+            $self->service->{$label} = $class;
         }
     }
 }
@@ -208,6 +208,7 @@ Hoppy - Flash XMLSocket Server.
   my $config = {
     alias => 'hoppy',
     port  => 12345,
+    test  => 1,      # does not work POE::Filter::Line ( use it as telnet when debug phaze )
   };
 
   my $server = Hoppy->new(config => $config);
@@ -233,11 +234,11 @@ Hoppy is a perl implementation of Flash XMLSocket Server.
 
 =head2 stop
 
-=head2 unicast( $user_id, $message )
+=head2 unicast( { user_id => $user_id, messge => $message } )
 
-=head2 multicast( $sender_session_id, $room_id, $message )
+=head2 multicast( { sender => $sender_session_id, room_id => $room_id, message => $message } )
 
-=head2 broadcast( $sender_session_id, $message )
+=head2 broadcast( { sender => $sender_session_id, message => $message } )
 
 =head2 dispatch($method, $params, $poe)
 
