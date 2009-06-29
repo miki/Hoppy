@@ -63,7 +63,7 @@ sub unicast {
     my %args       = @_;
     my $user_id    = $args{user_id};
     my $message    = $args{message};
-    my $session_id = $self->room->fetch_user_from_user_id($user_id)->session_id;
+    my $session_id = $args{session_id} || $self->room->fetch_user_from_user_id($user_id)->session_id;
     $poe_kernel->post( $session_id => "Send" => $message );
 }
 

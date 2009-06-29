@@ -34,7 +34,7 @@ sub work {
         $data = { result => "", error => $message };
     }
     my $serialized = $c->formatter->serialize($data);
-    $c->unicast( user_id => $user_id, message => $serialized );
+    $c->unicast( session_id => $session_id, user_id => $user_id, message => $serialized );
 }
 
 1;

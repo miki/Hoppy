@@ -36,17 +36,19 @@ sub login {
     my $args = shift;
     my $poe  = shift;
 
+    my $c = $self->context;
+
+    my $result = 1;
+    if ( $c->service->{auth} ) {
+        $result = $c->service->{auth}->work( $args, $poe );
+        return 0 unless $result;
+    }
+
     my $user_id    = $args->{user_id};
     my $password   = $args->{password};
     my $session_id = $args->{session_id};
     my $room_id    = $args->{room_id} || 'global';
 
-    my $c = $self->context;
-
-    if ( $c->service->{auth} ) {
-        my $result = $c->service->{auth}->work( $args, $poe );
-        return 0 unless $result;
-    }
     delete $c->{not_authorized}->{$session_id};
 
     my $user = Hoppy::User->new(
@@ -57,7 +59,7 @@ sub login {
     $self->{rooms}->{$room_id}->{$user_id} = $user;
     $self->{where_in}->{$user_id}          = $room_id;
     $self->{sessions}->{$session_id}       = $user_id;
-    return 1;
+    return $result;
 }
 
 sub logout {
