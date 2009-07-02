@@ -1,6 +1,7 @@
 package Hoppy::Service::Login;
 use strict;
 use warnings;
+use Data::GUID;
 use base qw( Hoppy::Service::Base );
 
 sub work {
@@ -8,6 +9,9 @@ sub work {
     my $args = shift;
     my $poe  = shift;
 
+    if ( $args->{auto} ){ 
+        $args->{user_id} = Data::GUID->new->as_string;
+    }
     my $user_id    = $args->{user_id};
     my $password   = $args->{password};
     my $room_id    = $args->{room_id};
@@ -27,14 +31,14 @@ sub work {
 
     my $data;
     if ($result) {
-        $data = { result => $result, error => "" };
+        $data = { result => { login_id => $user_id, login_time => time() }, error => "" };
     }
     else {
         my $message = "login failed";
         $data = { result => "", error => $message };
     }
     my $serialized = $c->formatter->serialize($data);
-    $c->unicast( session_id => $session_id, user_id => $user_id, message => $serialized );
+    $c->unicast( {session_id => $session_id, user_id => $user_id, message => $serialized} );
 }
 
 1;

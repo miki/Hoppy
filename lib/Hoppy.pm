@@ -11,7 +11,7 @@ use UNIVERSAL::require;
 use Carp;
 use base qw(Hoppy::Base);
 
-__PACKAGE__->mk_accessors($_) for qw(handler formatter service room);
+__PACKAGE__->mk_accessors($_) for qw(handler formatter service hook room);
 
 our $VERSION = '0.00003';
 
@@ -24,6 +24,13 @@ sub new {
 
 sub start {
     my $self = shift;
+    if ( ref $self->hook eq 'ARRAY') {
+        for my $hook ( @{ $self->hook } ) {
+            my $obj  = $hook->[0];
+            my $args = $hook->[1];
+            $obj->work($args);
+        }
+    }
     POE::Kernel->run;
 }
 
@@ -60,10 +67,11 @@ sub dispatch {
 
 sub unicast {
     my $self       = shift;
-    my %args       = @_;
-    my $user_id    = $args{user_id};
-    my $message    = $args{message};
-    my $session_id = $args{session_id} || $self->room->fetch_user_from_user_id($user_id)->session_id;
+    my $args       = shift;
+    my $user_id    = $args->{user_id};
+    my $message    = $args->{message};
+    my $session_id = $args->{session_id}
+      || $self->room->fetch_user_from_user_id($user_id)->session_id;
     $poe_kernel->post( $session_id => "Send" => $message );
 }
 
@@ -110,12 +118,30 @@ sub regist_service {
     }
 }
 
+sub regist_hook {
+    my $self = shift;
+    $self->hook([]);
+    while (@_) {
+        my $class = shift @_;
+        my $args  = shift @_ || {};
+        unless ( ref($class) ) {
+            $class->require or die $@;
+            my $obj = $class->new( context => $self );
+            push( @{ $self->hook }, [$obj, $args] );
+        }
+        else {
+            push( @{ $self->hook }, [$class, $args]);
+        }
+    }
+}
+
 sub _setup {
     my $self = shift;
 
     $self->_load_classes;
 
-    my $filter = POE::Filter::Line->new( Literal => "\x00" ) unless $self->config->{test};
+    my $filter = POE::Filter::Line->new( Literal => "\x00" )
+      unless $self->config->{test};
     POE::Component::Server::TCP->new(
         Alias => $self->config->{alias} || 'xmlsocketd',
         Port  => $self->config->{port}  || 10000,
@@ -229,6 +255,8 @@ Hoppy is a perl implementation of Flash XMLSocket Server.
 =head2 new(config => $config)
 
 =head2 regist_service( $service_label => $service_class )
+
+=head2 regist_hook( $hook_class => $args )
 
 =head2 start
 
