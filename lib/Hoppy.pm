@@ -24,7 +24,7 @@ sub new {
 
 sub start {
     my $self = shift;
-    if ( ref $self->hook eq 'ARRAY') {
+    if ( ref $self->hook eq 'ARRAY' ) {
         for my $hook ( @{ $self->hook } ) {
             my $obj  = $hook->[0];
             my $args = $hook->[1];
@@ -120,17 +120,17 @@ sub regist_service {
 
 sub regist_hook {
     my $self = shift;
-    $self->hook([]);
+    $self->hook( [] );
     while (@_) {
         my $class = shift @_;
-        my $args  = shift @_ || {};
+        my $args = shift @_ || {};
         unless ( ref($class) ) {
             $class->require or die $@;
             my $obj = $class->new( context => $self );
-            push( @{ $self->hook }, [$obj, $args] );
+            push( @{ $self->hook }, [ $obj, $args ] );
         }
         else {
-            push( @{ $self->hook }, [$class, $args]);
+            push( @{ $self->hook }, [ $class, $args ] );
         }
     }
 }
@@ -140,8 +140,19 @@ sub _setup {
 
     $self->_load_classes;
 
-    my $filter = POE::Filter::Line->new( Literal => "\x00" )
-      unless $self->config->{test};
+    my $filter = POE::Filter::Line->new( Literal => "\x00" );
+    if ( $self->config->{test} and $self->config->{test} == 1 ) {
+        $filter = undef;
+    }
+    elsif ( $self->config->{test} and $self->config->{test} == 2 ) {
+        use Hoppy::TestFilter;
+        $filter = Hoppy::TestFilter->new($self);
+        #$filter = POE::Filter::Line->new(
+        #    InputRegexp   => qr/\x00|\n/,
+        #    OutputLiteral => "\n\x00"
+        #);
+    }
+
     POE::Component::Server::TCP->new(
         Alias => $self->config->{alias} || 'xmlsocketd',
         Port  => $self->config->{port}  || 10000,

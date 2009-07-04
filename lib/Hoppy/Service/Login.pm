@@ -31,7 +31,7 @@ sub work {
 
     my $data;
     if ($result) {
-        $data = { result => { login_id => $user_id, login_time => time() }, error => "" };
+        $data = { result => { method_name => "login", login_id => $user_id, login_time => time() }, error => "" };
     }
     else {
         my $message = "login failed";
