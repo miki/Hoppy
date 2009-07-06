@@ -5,22 +5,20 @@ use Data::GUID;
 use base qw( Hoppy::Service::Base );
 
 sub work {
-    my $self = shift;
-    my $args = shift;
-
+    my $self       = shift;
+    my $args       = shift;
     my $in_data    = $args->{in_data};
     my $poe        = $args->{poe};
     my $session_id = $poe->session->ID;
-    my $c          = $self->context;
-
-    ## It can distribute the ID automatically
+    ## It can generate and distribute ID automatically
     if ( $in_data->{params}->{auto} ) {
         $args->{user_id} = Data::GUID->new->as_string;
     }
     else {
         $args->{user_id} = $in_data->{params}->{user_id};
     }
-
+    ## login
+    my $c      = $self->context;
     my $result = $c->room->login(
         {
             user_id    => $args->{user_id},
@@ -30,35 +28,35 @@ sub work {
         },
         $poe
     );
-
-    my $out_data;
-    if ($result) {
-        $out_data = {
-            result => {
-                method_name => "login",
-                login_id    => $args->{user_id},
-                login_time  => time()
-            },
-            error => ""
-        };
-    }
-    else {
-        my $message = "login failed";
-        $out_data = { result => "", error => $message };
-    }
+    ## response
     if ( $in_data->{id} ) {
+        ## set out_data
+        my $out_data = {};
         $out_data->{id} = $in_data->{id};
-    }
-    my $serialized = $c->formatter->serialize($out_data);
-    $c->unicast(
-        {
-            session_id => $session_id,
-            user_id    => $args->{user_id},
-            message    => $serialized
+        if ($result) {
+            $out_data = {
+                result => {
+                    method_name => "login",
+                    login_id    => $args->{user_id},
+                    login_time  => time()
+                },
+                error => ""
+            };
         }
-    );
+        else {
+            $out_data = { result => "", error => "login failed" };
+        }
+        ## respond it
+        my $serialized = $c->formatter->serialize($out_data);
+        $c->unicast(
+            {
+                session_id => $session_id,
+                user_id    => $args->{user_id},
+                message    => $serialized
+            }
+        );
+    }
 }
-
 1;
 __END__
 

@@ -12,7 +12,7 @@ if ( my $pid = fork ) {
         PeerPort => '10000',
         Proto    => 'tcp',
     );
-    my $data      = { method => "login", params => { user_id => "miki" } };
+    my $data      = { method => "login", params => { user_id => "miki" }, id => int rand(100) };
     my $formatter = Hoppy::Formatter::JSON->new;
     my $json      = $formatter->serialize($data);
     $socket->send( $json . "\n" );
@@ -25,7 +25,7 @@ if ( my $pid = fork ) {
     wait;
 }
 elsif ( defined $pid ) {
-    my $server = Hoppy->new( config => { alias => "server", test => 1 } );
+    my $server = Hoppy->new( config => { alias => "server", test => 2 } );
     POE::Session->create(
         inline_states => {
             _start => sub {

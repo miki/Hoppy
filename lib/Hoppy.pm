@@ -13,7 +13,7 @@ use base qw(Hoppy::Base);
 
 __PACKAGE__->mk_accessors($_) for qw(handler formatter service hook room);
 
-our $VERSION = '0.00003';
+our $VERSION = '0.01001';
 
 sub new {
     my $class = shift;
@@ -43,9 +43,7 @@ sub dispatch {
     my $self    = shift;
     my $in_data = shift;
     my $poe     = shift;
-
     my $session_id = $poe->session->ID;
-
     my $method = $in_data->{method};
     if ( $method eq 'login' ) {
         my $args = { in_data => $in_data, poe => $poe }; 
@@ -138,20 +136,14 @@ sub regist_hook {
 
 sub _setup {
     my $self = shift;
-
     $self->_load_classes;
-
     my $filter = POE::Filter::Line->new( Literal => "\x00" );
     if ( $self->config->{test} and $self->config->{test} == 1 ) {
         $filter = undef;
     }
     elsif ( $self->config->{test} and $self->config->{test} == 2 ) {
-        use Hoppy::TestFilter;
+        Hoppy::TestFilter->require or croak $@;
         $filter = Hoppy::TestFilter->new($self);
-        #$filter = POE::Filter::Line->new(
-        #    InputRegexp   => qr/\x00|\n/,
-        #    OutputLiteral => "\n\x00"
-        #);
     }
 
     POE::Component::Server::TCP->new(

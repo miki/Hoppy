@@ -18,7 +18,6 @@ sub serialize {
 
 sub deserialize {
     my ( $self, $json, $code ) = @_;
-    use Data::Dumper;
     if ( !Encode::is_utf8($json) ) {
         if ( !$code ) {
             my $enc = guess_encoding( $json, qw/euc-jp shiftjis utf8/ );

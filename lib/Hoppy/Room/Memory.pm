@@ -32,30 +32,24 @@ sub delete_room {
 }
 
 sub login {
-    my $self = shift;
-    my $args = shift;
-    my $poe  = shift;
-
-    my $c = $self->context;
-
+    my $self   = shift;
+    my $args   = shift;
+    my $poe    = shift;
+    my $c      = $self->context;
     my $result = 1;
-    if ( $c->service->{auth} ) {
-        $result = $c->service->{auth}->work( $args, $poe );
+    if ( $c->service->{auth_login} ) {
+        $result = $c->service->{auth_login}->work( $args, $poe );
         return 0 unless $result;
     }
-
     my $user_id    = $args->{user_id};
     my $password   = $args->{password};
     my $session_id = $args->{session_id};
     my $room_id    = $args->{room_id} || 'global';
-
     delete $c->{not_authorized}->{$session_id};
-
     my $user = Hoppy::User->new(
         user_id    => $user_id,
         session_id => $session_id
     );
-
     $self->{rooms}->{$room_id}->{$user_id} = $user;
     $self->{where_in}->{$user_id}          = $room_id;
     $self->{sessions}->{$session_id}       = $user_id;
@@ -63,18 +57,22 @@ sub login {
 }
 
 sub logout {
-    my $self = shift;
-    my $args = shift;
-    my $poe  = shift;
-
+    my $self   = shift;
+    my $args   = shift;
+    my $poe    = shift;
+    my $c      = $self->context;
+    my $result = 1;
+    if ( $c->service->{auth_logout} ) {
+        $result = $c->service->{auth_logout}->work( $args, $poe );
+        return 0 unless $result;
+    }
     my $user_id = $args->{user_id};
     my $user    = $self->fetch_user_from_user_id($user_id);
-
     delete $self->{sessions}->{ $user->session_id };
     my $room_id = delete $self->{where_in}->{$user_id};
     delete $self->{rooms}->{$room_id}->{$user_id};
     $self->context->{not_authorized}->{ $user->session_id } = 1;
-    return 1;
+    return $result;
 }
 
 sub fetch_user_from_user_id {

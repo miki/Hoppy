@@ -1,5 +1,11 @@
 Revision history for Perl extension Hoppy
 
+0.01001   2009/07/05
+        - add Hook point(Base class)
+        - add auto login
+        - changed some inner APIs ( slightly)
+        - fix many bugs
+
 0.00003   2009/05/18
         - fix a bug ( regist_service() method does wrong behavior )
         - fix a POD
