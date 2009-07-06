@@ -11,15 +11,15 @@ sub work {
     my $in_data    = $args->{in_data};
     my $poe        = $args->{poe};
     my $session_id = $poe->session->ID;
+    my $c          = $self->context;
 
+    ## It can distribute the ID automatically
     if ( $in_data->{params}->{auto} ) {
         $args->{user_id} = Data::GUID->new->as_string;
     }
     else {
         $args->{user_id} = $in_data->{params}->{user_id};
     }
-
-    my $c = $self->context;
 
     my $result = $c->room->login(
         {

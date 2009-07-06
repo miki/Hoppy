@@ -6,22 +6,33 @@ use base qw( Hoppy::Service::Base );
 sub work {
     my $self = shift;
     my $args = shift;
-    my $poe  = shift;
 
     my $user_id = $args->{user_id};
-
+    my $in_data = $args->{in_data};
+    my $poe     = $args->{poe};
+    my $session_id = $poe->session->ID;
     my $c = $self->context;
 
     my $result = $c->room->logout( $args, $poe );
-    my $data;
+    my $out_data;
     if ($result) {
-        $data = { result => $result, error => "" };
+        $out_data = { result => $result, error => "" };
     }
     else {
         my $message = "logout failed";
-        $data = { result => "", error => $message };
+        $out_data = { result => "", error => $message };
     }
-    my $serialized = $c->formatter->serialize($data);
+    if ( $in_data->{id} ) {
+        $out_data->{id} = $in_data->{id};
+    }
+    my $serialized = $c->formatter->serialize($out_data);
+    $c->unicast(
+        {
+            session_id => $session_id,
+            user_id    => $args->{user_id},
+            message    => $serialized
+        }
+    );
 }
 
 1;
