@@ -14,6 +14,7 @@ requires 'Class::Data::ConfigHash';
 requires 'JSON';
 requires 'Encode';
 requires 'Encode::Guess';
+requires 'Data::GUID';
 
 build_requires 'Test::More';
 build_requires 'FindBin::libs';
