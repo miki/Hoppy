@@ -7,38 +7,56 @@ use base qw( Hoppy::Service::Base );
 sub work {
     my $self = shift;
     my $args = shift;
-    my $poe  = shift;
 
-    if ( $args->{auto} ){ 
+    my $in_data    = $args->{in_data};
+    my $poe        = $args->{poe};
+    my $session_id = $poe->session->ID;
+
+    if ( $in_data->{params}->{auto} ) {
         $args->{user_id} = Data::GUID->new->as_string;
     }
-    my $user_id    = $args->{user_id};
-    my $password   = $args->{password};
-    my $room_id    = $args->{room_id};
-    my $session_id = $poe->session->ID;
+    else {
+        $args->{user_id} = $in_data->{params}->{user_id};
+    }
 
     my $c = $self->context;
 
     my $result = $c->room->login(
         {
-            user_id    => $user_id,
-            password   => $password,
-            room_id    => $room_id,
+            user_id    => $args->{user_id},
+            password   => $in_data->{params}->{password},
+            room_id    => $in_data->{params}->{room_id},
             session_id => $session_id,
         },
         $poe
     );
 
-    my $data;
+    my $out_data;
     if ($result) {
-        $data = { result => { method_name => "login", login_id => $user_id, login_time => time() }, error => "" };
+        $out_data = {
+            result => {
+                method_name => "login",
+                login_id    => $args->{user_id},
+                login_time  => time()
+            },
+            error => ""
+        };
     }
     else {
         my $message = "login failed";
-        $data = { result => "", error => $message };
+        $out_data = { result => "", error => $message };
     }
-    my $serialized = $c->formatter->serialize($data);
-    $c->unicast( {session_id => $session_id, user_id => $user_id, message => $serialized} );
+    if ( $in_data->{id} ) {
+        $out_data->{id} = $in_data->{id};
+    }
+    my $serialized = $c->formatter->serialize($out_data);
+    $c->unicast(
+        {
+            session_id => $session_id,
+            user_id    => $args->{user_id},
+            message    => $serialized
+        }
+    );
 }
 
 1;

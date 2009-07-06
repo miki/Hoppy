@@ -40,28 +40,29 @@ sub stop {
 }
 
 sub dispatch {
-    my $self   = shift;
-    my $method = shift;
-    my $params = shift;
-    my $poe    = shift;
+    my $self    = shift;
+    my $in_data = shift;
+    my $poe     = shift;
 
     my $session_id = $poe->session->ID;
 
+    my $method = $in_data->{method};
     if ( $method eq 'login' ) {
-        $self->service->{login}->work( $params, $poe );
+        my $args = { in_data => $in_data, poe => $poe }; 
+        $self->service->{login}->work($args);
     }
     elsif ( $self->{not_authorized}->{$session_id} ) {
         my $message    = "not authorized. you have to login()";
-        my $data       = { result => "", "error" => $message };
-        my $serialized = $self->formatter->serialize($data);
+        my $out_data   = { result => "", "error" => $message };
+        my $serialized = $self->formatter->serialize($out_data);
         $self->handler->{Send}->do_handle( $poe, $serialized );
     }
     else {
         my $user = $self->room->fetch_user_from_session_id($session_id);
         return unless $user;
         my $user_id = $user->user_id;
-        my %args = ( user_id => $user_id, params => $params );
-        $self->service->{$method}->work( \%args, $poe );
+        my $args = { user_id => $user_id, in_data => $in_data, poe => $poe };
+        $self->service->{$method}->work( $args );
     }
 }
 

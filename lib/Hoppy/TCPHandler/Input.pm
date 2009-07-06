@@ -23,15 +23,13 @@ sub do_handle {
         $poe->kernel->yield("shutdown");
     }
     else {
-        my $data = '';
-        eval { $data = $c->formatter->deserialize($input); };
+        my $in_data = '';
+        eval { $in_data = $c->formatter->deserialize($input); };
         if ($@) {
             warn "IO Format Error: $@";
         }
         else {
-            my $method = $data->{method};
-            my $params = $data->{params};
-            $c->dispatch( $method, $params, $poe );
+            $c->dispatch( $in_data, $poe );
         }
     }
 }

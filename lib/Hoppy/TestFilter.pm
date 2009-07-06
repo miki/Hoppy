@@ -41,3 +41,35 @@ sub put {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Hoppy::TestFilter - Custom POE::Filter for Test Mode. (delived from POE::Filter::Line) 
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=head2 FRAMING_BUFFER
+
+=head2 new()
+
+=head2 get_one_start()
+
+=head2 put()
+
+=head1 AUTHOR
+
+Takeshi Miki E<lt>miki@cpan.orgE<gt>
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=head1 SEE ALSO
+
+=cut
