@@ -5,6 +5,10 @@ use base qw( Hoppy::Base );
 
 sub do_handle {
     my $self = shift;
+    my $c    = $self->context;
+    if ( ref $c->hook->{client_error} eq 'HASH' ) {
+        $c->hook->{client_error}->work();
+    }
 }
 
 1;

@@ -32,6 +32,10 @@ sub do_handle {
             $c->dispatch( $in_data, $poe );
         }
     }
+
+    if ( ref $c->hook->{client_input} eq 'HASH' ) {
+        $c->hook->{client_input}->work();
+    }
 }
 
 sub cross_domain_policy_xml {

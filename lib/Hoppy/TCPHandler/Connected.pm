@@ -10,6 +10,9 @@ sub do_handle {
     my $session_id = $poe->session->ID; 
     $c->{sessions}->{$session_id} = 1;
     $c->{not_authorized}->{$session_id} = 1;
+    if ( ref $c->hook->{client_connect} eq 'HASH' ) {
+        $c->hook->{client_connect}->work();
+    }
 }
 
 1;

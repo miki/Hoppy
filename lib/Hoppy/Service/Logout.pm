@@ -33,6 +33,9 @@ sub work {
             message    => $serialized
         }
     );
+    if ( ref $c->hook->{logout} eq 'HASH' ) {
+        $c->hook->{logout}->work();
+    }
 }
 
 1;

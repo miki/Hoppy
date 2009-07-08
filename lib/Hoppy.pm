@@ -24,29 +24,28 @@ sub new {
 
 sub start {
     my $self = shift;
-    if ( ref $self->hook eq 'ARRAY' ) {
-        for my $hook ( @{ $self->hook } ) {
-            my $obj  = $hook->[0];
-            my $args = $hook->[1];
-            $obj->work($args);
-        }
+    if ( ref $self->hook->{start} eq 'HASH' ) {
+        $self->hook->{start}->work();
     }
     POE::Kernel->run;
 }
 
 sub stop {
     my $self = shift;
+    if ( ref $self->hook->{stop} eq 'HASH' ) {
+        $self->hook->{stop}->work();
+    }
     POE::Kernel->stop;
 }
 
 sub dispatch {
-    my $self    = shift;
-    my $in_data = shift;
-    my $poe     = shift;
+    my $self       = shift;
+    my $in_data    = shift;
+    my $poe        = shift;
     my $session_id = $poe->session->ID;
-    my $method = $in_data->{method};
+    my $method     = $in_data->{method};
     if ( $method eq 'login' ) {
-        my $args = { in_data => $in_data, poe => $poe }; 
+        my $args = { in_data => $in_data, poe => $poe };
         $self->service->{login}->work($args);
     }
     elsif ( $self->{not_authorized}->{$session_id} ) {
@@ -60,7 +59,7 @@ sub dispatch {
         return unless $user;
         my $user_id = $user->user_id;
         my $args = { user_id => $user_id, in_data => $in_data, poe => $poe };
-        $self->service->{$method}->work( $args );
+        $self->service->{$method}->work($args);
     }
 }
 
@@ -119,20 +118,36 @@ sub regist_service {
 
 sub regist_hook {
     my $self = shift;
-    $self->hook( [] );
     while (@_) {
+        my $label = shift @_;
         my $class = shift @_;
-        my $args = shift @_ || {};
         unless ( ref($class) ) {
             $class->require or die $@;
             my $obj = $class->new( context => $self );
-            push( @{ $self->hook }, [ $obj, $args ] );
+            $self->hook->{$label} = $obj;
         }
         else {
-            push( @{ $self->hook }, [ $class, $args ] );
+            $self->hook->{$label} = $class;
         }
     }
 }
+
+#sub regist_hook {
+#    my $self = shift;
+#    $self->hook( [] );
+#    while (@_) {
+#        my $class = shift @_;
+#        my $args = shift @_ || {};
+#        unless ( ref($class) ) {
+#            $class->require or die $@;
+#            my $obj = $class->new( context => $self );
+#            push( @{ $self->hook }, [ $obj, $args ] );
+#        }
+#        else {
+#            push( @{ $self->hook }, [ $class, $args ] );
+#        }
+#    }
+#}
 
 sub _setup {
     my $self = shift;
@@ -202,6 +217,24 @@ sub _load_classes {
             my ( $label, $class ) = %$_;
             $class->require or croak $@;
             $self->service->{$label} = $class->new( context => $self );
+        }
+    }
+
+    # default hook
+    {
+        $self->hook( {} );
+        my @hooks = ();
+        if ( $self->config->{regist_hooks} ) {
+            while ( my ( $key, $value ) =
+                each %{ $self->config->{regist_hooks} } )
+            {
+                push @hooks, { $key => $value };
+            }
+        }
+        for (@hooks) {
+            my ( $label, $class ) = %$_;
+            $class->require or croak $@;
+            $self->hook->{$label} = $class->new( context => $self );
         }
     }
 
