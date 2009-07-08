@@ -9,14 +9,17 @@ sub do_handle {
     my $c          = $self->context;
     my $session_id = $poe->session->ID;
     my $user       = $c->room->fetch_user_from_session_id($session_id);
+    my $user_id;
     if ($user) {
-        $c->room->logout( { user_id => $user->user_id }, $poe );
+        $user_id = $user->user_id;
+        $c->room->logout( { user_id => $user_id }, $poe );
     }
     delete $c->{sessions}->{$session_id};
     delete $c->{not_authorized}->{$session_id};
     $poe->kernel->yield("shutdown");
-    if ( ref $c->hook->{client_disconnect} eq 'HASH' ) {
-        $c->hook->{client_disconnect}->work();
+    if ( $c->hook->{client_disconnect} ) {
+        $c->hook->{client_disconnect}
+          ->work( { user_id => $user_id, poe => $poe } );
     }
 }
 

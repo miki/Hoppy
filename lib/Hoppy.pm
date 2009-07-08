@@ -24,7 +24,8 @@ sub new {
 
 sub start {
     my $self = shift;
-    if ( ref $self->hook->{start} eq 'HASH' ) {
+    use Data::Dumper;
+    if ( $self->hook->{start} ) {
         $self->hook->{start}->work();
     }
     POE::Kernel->run;
@@ -32,7 +33,7 @@ sub start {
 
 sub stop {
     my $self = shift;
-    if ( ref $self->hook->{stop} eq 'HASH' ) {
+    if ( $self->hook->{stop} ) {
         $self->hook->{stop}->work();
     }
     POE::Kernel->stop;
@@ -131,23 +132,6 @@ sub regist_hook {
         }
     }
 }
-
-#sub regist_hook {
-#    my $self = shift;
-#    $self->hook( [] );
-#    while (@_) {
-#        my $class = shift @_;
-#        my $args = shift @_ || {};
-#        unless ( ref($class) ) {
-#            $class->require or die $@;
-#            my $obj = $class->new( context => $self );
-#            push( @{ $self->hook }, [ $obj, $args ] );
-#        }
-#        else {
-#            push( @{ $self->hook }, [ $class, $args ] );
-#        }
-#    }
-#}
 
 sub _setup {
     my $self = shift;

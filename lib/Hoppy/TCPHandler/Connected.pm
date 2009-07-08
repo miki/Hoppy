@@ -4,14 +4,14 @@ use warnings;
 use base qw( Hoppy::Base );
 
 sub do_handle {
-    my $self = shift;
-    my $poe  = shift;
-    my $c    = $self->context;
-    my $session_id = $poe->session->ID; 
-    $c->{sessions}->{$session_id} = 1;
+    my $self       = shift;
+    my $poe        = shift;
+    my $c          = $self->context;
+    my $session_id = $poe->session->ID;
+    $c->{sessions}->{$session_id}       = 1;
     $c->{not_authorized}->{$session_id} = 1;
-    if ( ref $c->hook->{client_connect} eq 'HASH' ) {
-        $c->hook->{client_connect}->work();
+    if ( $c->hook->{client_connect} ) {
+        $c->hook->{client_connect}->work( { poe => $poe } );
     }
 }
 

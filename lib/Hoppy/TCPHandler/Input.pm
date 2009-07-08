@@ -15,12 +15,7 @@ sub do_handle {
     elsif ( $input =~ /^exit(\x00)*/ ) {
         my $session_id = $poe->session->ID;
         my $user       = $c->room->fetch_user_from_session_id($session_id);
-        if ($user) {
-            $c->room->logout( { user_id => $user->user_id }, $poe );
-        }
-        delete $c->{sessions}->{$session_id};
-        delete $c->{not_authorized}->{$session_id};
-        $poe->kernel->yield("shutdown");
+        $c->handler->{Disconnected}->do_handle($poe);
     }
     else {
         my $in_data = '';
@@ -33,8 +28,8 @@ sub do_handle {
         }
     }
 
-    if ( ref $c->hook->{client_input} eq 'HASH' ) {
-        $c->hook->{client_input}->work();
+    if ( $c->hook->{client_input} ) {
+        $c->hook->{client_input}->work( { poe => $poe } );
     }
 }
 
