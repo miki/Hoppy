@@ -7,11 +7,11 @@ sub work {
     my $self = shift;
     my $args = shift;
 
-    my $user_id = $args->{user_id};
-    my $in_data = $args->{in_data};
-    my $poe     = $args->{poe};
+    my $user_id    = $args->{user_id};
+    my $in_data    = $args->{in_data};
+    my $poe        = $args->{poe};
     my $session_id = $poe->session->ID;
-    my $c = $self->context;
+    my $c          = $self->context;
 
     my $result = $c->room->logout( $args, $poe );
     my $out_data;
@@ -33,8 +33,8 @@ sub work {
             message    => $serialized
         }
     );
-    if ( ref $c->hook->{logout} eq 'HASH' ) {
-        $c->hook->{logout}->work();
+    if ( my $hook = $c->hook->{logout} ) {
+        $hook->work($args);
     }
 }
 

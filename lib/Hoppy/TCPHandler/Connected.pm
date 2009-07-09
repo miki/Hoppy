@@ -8,10 +8,12 @@ sub do_handle {
     my $poe        = shift;
     my $c          = $self->context;
     my $session_id = $poe->session->ID;
+
     $c->{sessions}->{$session_id}       = 1;
     $c->{not_authorized}->{$session_id} = 1;
-    if ( $c->hook->{client_connect} ) {
-        $c->hook->{client_connect}->work( { poe => $poe } );
+
+    if ( my $hook = $c->hook->{client_connect} ) {
+        $hook->work( { poe => $poe } );
     }
 }
 

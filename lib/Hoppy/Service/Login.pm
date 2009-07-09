@@ -35,8 +35,8 @@ sub work {
         if ($result) {
             $out_data = {
                 result => {
-                    login_id    => $args->{user_id},
-                    login_time  => time()
+                    login_id   => $args->{user_id},
+                    login_time => time()
                 },
                 error => ""
             };
@@ -55,8 +55,8 @@ sub work {
             }
         );
     }
-    if ( ref $c->hook->{login} eq 'HASH' ) {
-        $c->hook->{login}->work();
+    if ( my $hook = $c->hook->{login} ) {
+        $hook->work($args);
     }
 }
 1;

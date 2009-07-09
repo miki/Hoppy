@@ -13,7 +13,7 @@ use base qw(Hoppy::Base);
 
 __PACKAGE__->mk_accessors($_) for qw(handler formatter service hook room);
 
-our $VERSION = '0.01001';
+our $VERSION = '0.01002';
 
 sub new {
     my $class = shift;
@@ -24,17 +24,16 @@ sub new {
 
 sub start {
     my $self = shift;
-    use Data::Dumper;
-    if ( $self->hook->{start} ) {
-        $self->hook->{start}->work();
+    if ( my $hook = $self->hook->{start} ) {
+        $hook->work();
     }
     POE::Kernel->run;
 }
 
 sub stop {
     my $self = shift;
-    if ( $self->hook->{stop} ) {
-        $self->hook->{stop}->work();
+    if ( my $hook = $self->hook->{stop} ) {
+        $hook->work();
     }
     POE::Kernel->stop;
 }

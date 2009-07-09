@@ -17,9 +17,8 @@ sub do_handle {
     delete $c->{sessions}->{$session_id};
     delete $c->{not_authorized}->{$session_id};
     $poe->kernel->yield("shutdown");
-    if ( $c->hook->{client_disconnect} ) {
-        $c->hook->{client_disconnect}
-          ->work( { user_id => $user_id, poe => $poe } );
+    if ( my $hook = $c->hook->{client_disconnected} ) {
+        $hook->work( { poe => $poe } );
     }
 }
 

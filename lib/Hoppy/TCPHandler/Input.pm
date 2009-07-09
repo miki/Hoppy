@@ -8,13 +8,12 @@ sub do_handle {
     my $poe   = shift;
     my $c     = $self->context;
     my $input = $poe->args->[0];
+
     if ( $input =~ /policy-file-request/ ) {
         my $xml = $self->cross_domain_policy_xml;
         $c->handler->{Send}->do_handle( $poe, $xml );
     }
     elsif ( $input =~ /^exit(\x00)*/ ) {
-        my $session_id = $poe->session->ID;
-        my $user       = $c->room->fetch_user_from_session_id($session_id);
         $c->handler->{Disconnected}->do_handle($poe);
     }
     else {
@@ -28,8 +27,8 @@ sub do_handle {
         }
     }
 
-    if ( $c->hook->{client_input} ) {
-        $c->hook->{client_input}->work( { poe => $poe } );
+    if ( my $hook = $c->hook->{client_input} ) {
+        $hook->work( { poe => $poe } );
     }
 }
 
