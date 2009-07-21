@@ -18,13 +18,13 @@ sub serialize {
 
 sub deserialize {
     my ( $self, $json, $code ) = @_;
-    if ( !Encode::is_utf8($json) ) {
-        if ( !$code ) {
-            my $enc = guess_encoding( $json, qw/euc-jp shiftjis utf8/ );
-            $code = $enc->name;
-        }
-        $json = Encode::decode( $code, $json );
-    }
+    #if ( !Encode::is_utf8($json) ) {
+    #    if ( !$code ) {
+    #        my $enc = guess_encoding( $json, qw/euc-jp shiftjis utf8/ );
+    #        $code = $enc->name;
+    #    }
+    #    $json = Encode::decode( $code, $json );
+    #}
     return JSON::from_json($json);
 }
 
