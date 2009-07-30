@@ -1,8 +1,8 @@
 package Hoppy;
 use strict;
 use warnings;
+use EV;
 use POE;
-use POE::Kernel { loop => 'POE::XS::Loop::EPoll' };
 use POE::Sugar::Args;
 use POE::Filter::Line;
 use POE::Component::Server::TCP;
