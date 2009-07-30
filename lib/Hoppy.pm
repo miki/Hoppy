@@ -59,7 +59,7 @@ sub dispatch {
         return unless $user;
         my $user_id = $user->user_id;
         my $args = { user_id => $user_id, in_data => $in_data, poe => $poe };
-        $self->service->{$method}->work($args);
+        eval { $self->service->{$method}->work($args) };
     }
 }
 
@@ -68,9 +68,15 @@ sub unicast {
     my $args       = shift;
     my $user_id    = $args->{user_id};
     my $message    = $args->{message};
-    my $session_id = $args->{session_id}
-      || $self->room->fetch_user_from_user_id($user_id)->session_id;
-    $poe_kernel->post( $session_id => "Send" => $message );
+    my $session_id = $args->{session_id};
+    eval {
+        if ( !$session_id and $user_id )
+        {
+            my $user = $self->room->fetch_user_from_user_id($user_id);
+            $session_id = $user->session_id;
+        }
+        $poe_kernel->post( $session_id => "Send" => $message );
+    };
 }
 
 sub multicast {
