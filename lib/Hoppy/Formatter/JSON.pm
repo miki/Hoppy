@@ -2,16 +2,21 @@ package Hoppy::Formatter::JSON;
 use strict;
 use warnings;
 use base qw( Hoppy::Base );
+use Encode;
 use JSON;
 
 sub serialize {
     my ( $self, $data, $code ) = @_;
     my $json = JSON::to_json($data);
+    if ( Encode::is_utf8($json) ) {
+        $json = encode( "utf8", $json );
+    }
     return $json;
 }
 
 sub deserialize {
     my ( $self, $json, $code ) = @_;
+    $json = decode( "utf8", $json );
     my $data = JSON::from_json($json);
     return $data;
 }

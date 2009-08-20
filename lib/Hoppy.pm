@@ -13,7 +13,7 @@ use base qw(Hoppy::Base);
 
 __PACKAGE__->mk_accessors($_) for qw(handler formatter service hook room);
 
-our $VERSION = '0.01002';
+our $VERSION = '0.01003';
 
 sub new {
     my $class = shift;
