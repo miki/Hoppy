@@ -9,7 +9,7 @@ sub serialize {
     my ( $self, $data, $code ) = @_;
     my $json = JSON::to_json($data);
     if ( Encode::is_utf8($json) ) {
-        $json = encode( "utf8", $json );
+        $json = encode( "utf8", decode( "utf8", $json ) );
     }
     return $json;
 }
