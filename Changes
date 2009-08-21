@@ -1,5 +1,8 @@
 Revision history for Perl extension Hoppy
 
+0.01005   2009/08/21
+        - fix a encoding bug (Hoppy::Formatter::JSON)
+
 0.01004   2009/08/21
         - fix a bug again (Hoppy::Formatter::JSON)
 
